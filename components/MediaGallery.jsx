@@ -44,7 +44,7 @@ export default function MediaGallery({ type = 'image' }) {
     /* overscroll-contain prevents the "bounce" from stucking the scroll.
        h-full with overflow-y-auto ensures the container is scrollable.
     */
-    <div className="h-full w-full min-h-screen overflow-y-auto bg-black p-4 overscroll-contain">
+    <div className="w-full min-h-[100dvh] bg-black p-4 overflow-y-auto overscroll-contain">
       {loading ? (
         <div className="flex h-64 items-center justify-center">
           <p className="text-white text-center">Loading...</p>
