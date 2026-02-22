@@ -41,10 +41,7 @@ export default function MediaGallery({ type = 'image' }) {
   const hasItems = items && items.length > 0;
 
   return (
-    /* overscroll-contain prevents the "bounce" from stucking the scroll.
-       h-full with overflow-y-auto ensures the container is scrollable.
-    */
-    <div className="w-full min-h-[100dvh] bg-black p-4 overflow-y-auto overscroll-contain">
+    <div className="w-full min-h-screen bg-black p-4">
       {loading ? (
         <div className="flex h-64 items-center justify-center">
           <p className="text-white text-center">Loading...</p>
@@ -65,8 +62,8 @@ export default function MediaGallery({ type = 'image' }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
-              // touch-auto is critical for mobile scrolling over Framer Motion elements
-              className="relative aspect-square group overflow-hidden rounded-lg bg-gray-900 touch-auto"
+              className="relative aspect-square group overflow-hidden rounded-lg bg-gray-900"
+              style={{ touchAction: 'auto' }}
             >
               {item.type === 'image' ? (
                 <img 
@@ -84,12 +81,13 @@ export default function MediaGallery({ type = 'image' }) {
                 />
               )}
 
-              {/* Overlay: pointer-events-none ensures swipes pass through to the scroll container */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 md:group-hover:opacity-100 transition-opacity flex items-end p-2 pointer-events-none">
+              {/* Overlay for download link */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 md:group-hover:opacity-100 transition-opacity flex items-end p-2">
                 <a 
                   href={item.downloadUrl} 
                   download 
-                  className="text-xs text-white underline bg-black/50 p-1 rounded pointer-events-auto"
+                  className="text-xs text-white underline bg-black/50 p-1 rounded"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   Download
                 </a>
