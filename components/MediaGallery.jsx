@@ -1,34 +1,28 @@
 import { motion } from 'framer-motion';
 
 export default function MediaGallery({ items = [] }) {
-  // Safety check to prevent the "length of undefined" error during Vercel build
-  const hasItems = items && items.length > 0;
-
   return (
-    /* overscroll-contain prevents the "bounce" from stucking the scroll.
-       h-full with overflow-y-auto ensures the container is scrollable.
-    */
-    <div className="h-full w-full min-h-screen overflow-y-auto bg-black p-4 overscroll-contain">
-      {!hasItems ? (
+    <div className="min-h-screen w-full overflow-y-auto bg-black p-4 overscroll-contain">
+      {(!items || items.length === 0) ? (
         <div className="flex h-64 items-center justify-center">
           <p className="text-white text-center">No media found.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-20">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-10">
           {items.map((item, idx) => (
             <motion.div
-              key={item.id || idx}
+              key={idx}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
-              // touch-auto is critical for mobile scrolling over Framer Motion elements
               className="relative aspect-square group overflow-hidden rounded-lg bg-gray-900 touch-auto"
             >
               {item.type === 'image' ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img 
                   src={item.url} 
-                  alt="Gallery upload" 
-                  className="w-full h-full object-cover transition-transform duration-500 md:group-hover:scale-110" 
+                  alt="Wedding upload" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                   loading="lazy"
                 />
               ) : (
@@ -40,12 +34,10 @@ export default function MediaGallery({ items = [] }) {
                 />
               )}
 
-              {/* Overlay: pointer-events-none ensures swipes pass through to the scroll container */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 md:group-hover:opacity-100 transition-opacity flex items-end p-2 pointer-events-none">
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2 cursor-pointer pointer-events-none group-hover:pointer-events-auto">
                 <a 
                   href={item.downloadUrl} 
-                  download 
-                  className="text-xs text-white underline bg-black/50 p-1 rounded pointer-events-auto"
+                  className="text-xs text-white underline pointer-events-auto"
                 >
                   Download
                 </a>
